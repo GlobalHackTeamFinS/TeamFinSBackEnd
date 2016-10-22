@@ -4,6 +4,43 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const Provider = require('../models/Provider');
 
+const jwt = require('jsonwebtoken');
+
+/**
+ * Passport authentication via jwt
+ */
+const db = {
+  updateOrCreate: function(user, callback){
+    callback(null,user);
+  }
+};
+
+exports.serialize = function(req, res, next) {
+  //call db function for update or create
+  db.updateOrCreate(req.user, function (err, user){
+    if(err) {return next(err);}
+    req.user = {
+      id: user.id
+    };
+    next();
+  });
+}
+
+
+exports.generateToken = function(req, res, next){
+  req.token = jwt.sign({
+    id: req.user.id,
+  }, process.env.SECRET),
+  { noTimeStamp: true };
+  next();
+}
+
+exports.respond = function(req, res){
+  res.status(200).json({
+    user: req.user,
+    token: req.token
+  });
+}
 
 /**
  * GET /add

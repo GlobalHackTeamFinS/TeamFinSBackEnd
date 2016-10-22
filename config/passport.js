@@ -5,7 +5,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const OAuthStrategy = require('passport-oauth').OAuthStrategy;
 const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 
-const User = require('../models/User');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -35,6 +34,24 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
     });
   });
 }));
+
+passport.use(new LocalStrategy(  
+  function(username, password, done) {
+    // database dummy - find user and verify password
+    if(username === 'edwin.kohl' && password === 'pass'){
+      done(null, {
+        id: 123,
+        firstname: 'edwin',
+        lastname: 'kohl',
+        email: 'edwin.kohl@manifest.com',
+        verified: true
+      });
+    }
+    else {
+      done(null, false);
+    }
+  }
+));
 
 /**
  * OAuth Strategy Overview

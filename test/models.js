@@ -1,44 +1,44 @@
 const chai = require('chai');
 const expect = chai.expect;
-const User = require('../models/User');
+const Provider = require('../models/Provider');
 
-describe('User Model', () => {
-  it('should create a new user', (done) => {
-    const user = new User({
+describe('Provider Model', () => {
+  it('should create a new provider', (done) => {
+    const provider = new Provider({
       email: 'test@gmail.com',
       password: 'password'
     });
-    user.save((err) => {
+    provider.save((err) => {
       expect(err).to.be.null;
-      expect(user.email).to.equal('test@gmail.com');
-      expect(user).to.have.property('createdAt');
-      expect(user).to.have.property('updatedAt');
+      expect(provider.email).to.equal('test@gmail.com');
+      expect(provider).to.have.property('createdAt');
+      expect(provider).to.have.property('updatedAt');
       done();
     });
   });
 
-  it('should not create a user with the unique email', (done) => {
-    const user = new User({
+  it('should not create a provider with the unique email', (done) => {
+    const provider = new Provider({
       email: 'test@gmail.com',
       password: 'password'
     });
-    user.save((err) => {
+    provider.save((err) => {
       expect(err).to.be.defined;
       expect(err.code).to.equal(11000);
       done();
     });
   });
 
-  it('should find user by email', (done) => {
-    User.findOne({ email: 'test@gmail.com' }, (err, user) => {
+  it('should find provider by email', (done) => {
+    Provider.findOne({ email: 'test@gmail.com' }, (err, provider) => {
       expect(err).to.be.null;
-      expect(user.email).to.equal('test@gmail.com');
+      expect(provider.email).to.equal('test@gmail.com');
       done();
     });
   });
 
-  it('should delete a user', (done) => {
-    User.remove({ email: 'test@gmail.com' }, (err) => {
+  it('should delete a provider', (done) => {
+    Provider.remove({ email: 'test@gmail.com' }, (err) => {
       expect(err).to.be.null;
       done();
     });

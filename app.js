@@ -77,7 +77,7 @@ app.use(expressValidator());
 app.use(session({
   resave: true,
   saveUninitialized: true,
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SECRET,
   store: new MongoStore({
     url: process.env.MONGODB_URI || process.env.MONGOLAB_URI,
     autoReconnect: true
@@ -90,7 +90,7 @@ app.use((req, res, next) => {
   if (req.path === '/api/upload') {
     next();
   } else {
-    lusca.csrf()(req, res, next);
+    next();
   }
 });
 app.use(lusca.xframe('SAMEORIGIN'));
@@ -113,10 +113,25 @@ app.use(function(req, res, next) {
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 
 /**
+ * Passport authentication options
+ */
+
+const expressJwt = require('express-jwt');
+const authenticate = expressJwt({secret: process.env.SECRET});
+
+app.post('/login', passport.authenticate(  
+  'local', {
+    session: false
+  }), providerController.serialize, providerController.generateToken, providerController.respond);
+
+/**
  * Primary app routes.
  */
 app.get('/', homeController.index);
-app.get('/add', providerController.add);
+app.get('/add', authenticate, providerController.add);
+app.get('/me', authenticate, function(req, res) {
+  res.status(200).json(req.user);
+});
 // app.get('/login', userController.getLogin);
 // app.post('/login', userController.postLogin);
 // app.get('/logout', userController.logout);
