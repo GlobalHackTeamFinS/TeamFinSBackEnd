@@ -39,22 +39,22 @@ const providerSchema = new mongoose.Schema({
 
 
 
-providerSchema.methods.increment = function(){
-  // get from db Total beds do not exceed this value
-  this.occupiedBeds += 1;
-  this.save();
-}
+// providerSchema.methods.increment = function(){
+//   // get from db Total beds do not exceed this value
+//   this.occupiedBeds += 1;
+//   this.save();
+// }
 
-providerSchema.methods.decrement = function(){
-  // don't be less than zero beds ocupado
-  this.occupiedBeds -= 1;
-  this.save();
-}
+// providerSchema.methods.decrement = function(){
+//   // don't be less than zero beds ocupado
+//   this.occupiedBeds -= 1;
+//   this.save();
+// }
 
-providerSchema.methods.setBase = function(occupiedBeds){
-  this.occupiedBeds = occupiedBeds;
-  this.save();
-}
+// providerSchema.methods.setBase = function(occupiedBeds){
+//   this.occupiedBeds = occupiedBeds;
+//   this.save();
+// }
 
 /**
  * Password hash middleware.

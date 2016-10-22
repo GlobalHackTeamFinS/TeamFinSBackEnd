@@ -3,6 +3,7 @@
  */
 const express = require('express');
 const compression = require('compression');
+const passport = require('passport');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
@@ -14,7 +15,6 @@ const MongoStore = require('connect-mongo')(session);
 const flash = require('express-flash');
 const path = require('path');
 const mongoose = require('mongoose');
-const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
@@ -90,7 +90,8 @@ app.use((req, res, next) => {
   if (req.path === '/api/upload') {
     next();
   } else {
-    lusca.csrf()(req, res, next);
+    // lusca.csrf()(req, res, next);
+    next();
   }
 });
 app.use(lusca.xframe('SAMEORIGIN'));
@@ -147,7 +148,7 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
  app.post('/provider/:id/increment', providerController.increment);
  app.post('/provider/:id/decrement', providerController.decrement);
  app.post('/provider/:id/setBase', providerController.setBase);
- 
+
 
 /**
  * API examples routes.

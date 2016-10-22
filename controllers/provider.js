@@ -5,28 +5,30 @@ const passport = require('passport');
 const Provider = require('../models/Provider');
 const mongoose = require('mongoose');
 
-/**
- * POST /provider/new
- */
-
-exports.newProvider = (req, res) => {
-  mongoose.model('Provider').create({
-
-  });
-}
 
 /**
  * POST /provider/:id/increment
  */
 
  exports.increment = (req, res) => {
-  const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
-    if(err) {
-      return console.log(err);
-    } else {
-      provider.increment();
-    }
+  Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : 1 } } )
+    .exec(function(err, db_res) { 
+    if (err) { 
+      throw err; 
+    } 
+    else { 
+      console.log(db_res); 
+      res.send(200);
+    } 
   });
+  // const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
+  //   if(err) {
+  //     return console.log(err);
+  //   } else {
+  //     console.log(provider);
+  //     provider.increment();
+  //   }
+  // });
  }
 
 /**
@@ -34,13 +36,23 @@ exports.newProvider = (req, res) => {
  */
 
  exports.decrement = (req, res) => {
-  const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
-    if(err) {
-      return console.log(err);
-    } else {
-      provider.decrement();
+  Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : -1 } } )
+    .exec(function(err, db_res) { 
+    if (err) { 
+      throw err; 
+    } 
+    else { 
+      console.log(db_res); 
+      res.send(200);
     }
-  });
+  }); 
+  // const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
+  //   if(err) {
+  //     return console.log(err);
+  //   } else {
+  //     provider.decrement();
+  //   }
+  // });  
  }
 
 /**
@@ -48,13 +60,24 @@ exports.newProvider = (req, res) => {
  */
 
  exports.setBase = (req, res) => {
-  const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
-    if(err) {
-      return console.log(err);
-    } else {
-      provider.setBase(req.body.setBase);
+  console.log(req.body);
+  Provider.findOneAndUpdate(req.id, { $set : { occupiedBeds : parseInt(req.body.setBase) } } )
+    .exec(function(err, db_res) { 
+    if (err) { 
+      throw err; 
+    } 
+    else { 
+      console.log(db_res); 
+      res.send(200);
     }
-  });
+  }); 
+  // const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
+  //   if(err) {
+  //     return console.log(err);
+  //   } else {
+  //     provider.setBase(req.body.setBase);
+  //   }
+  // });
  }
 
 
@@ -104,9 +127,10 @@ exports.logout = (req, res) => {
  * Create a new account.
  */
 exports.newProvider = (req, res, next) => {
+  console.log(req.body);
   req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 4 characters long').len(4);
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  // req.assert('password', 'Password must be at least 4 characters long').len(4);
+  // req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
   req.sanitize('email').normalizeEmail({ remove_dots: false });
 
   const errors = req.validationErrors();
@@ -117,30 +141,10 @@ exports.newProvider = (req, res, next) => {
     return res.json({error : errors })
   }
 
-  const provider = new Provider({
-    email: req.body.email,
-    password: req.body.password,
-    name: req.body.name,
-    phoneNumber: req.body.phoneNumber,
-    address: {
-      line1: req.body.address.line1,
-      line2: req.body.address.line2,
-      city: req.body.city,
-      zip: req.body.zip
-    },
-    acceptedClients: {
-      men: req.body.acceptedClients.men,
-      women: req.body.acceptedClients.women,
-      children: req.body.acceptedClients.children,
-      handicap: req.body.acceptedClients.handicap,
-      veteran: req.body.acceptedClients.veteran
-    },
-    totalBeds: req.body.totalBeds,
-    occupiedBeds: req.body.occupiedBeds,
-    intakeStart: req.body.intakeStart,
-    intakeEnd: req.body.intakeEnd,
-    description: req.body.description
-  });
+
+
+  const provider = new Provider(req.body);
+
 
   Provider.findOne({ email: req.body.email }, (err, existingProvider) => {
     if (err) { return next(err); }
@@ -154,6 +158,7 @@ exports.newProvider = (req, res, next) => {
         if (err) {
           return next(err);
         }
+        res.send(200);
         // res.redirect('/');
       });
     });
@@ -166,8 +171,8 @@ exports.newProvider = (req, res, next) => {
  * Update profile information.
  */
 exports.updateProvider = (req, res, next) => {
-  req.assert('email', 'Please enter a valid email address.').isEmail();
-  req.sanitize('email').normalizeEmail({ remove_dots: false });
+  // req.assert('email', 'Please enter a valid email address.').isEmail();
+  // req.sanitize('email').normalizeEmail({ remove_dots: false });
 
   const errors = req.validationErrors();
 
@@ -177,10 +182,12 @@ exports.updateProvider = (req, res, next) => {
     return res.json({error : errors })
   }
 
- 
-  Provider.where({_id: req.id }).update({ $set : req.body }, function(err, provider) {
+ console.log(req.body)
+ console.log(req);
+  Provider.where({_id: req.params.id }).update({ $set : req.body }, function(err, provider) {
       if (err) { return next(err); }
       // return res.json(provider);
+      res.send(200);
   }); 
 
   // Provider.findById(req.id, (err, provider) => {
