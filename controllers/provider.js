@@ -3,33 +3,63 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const Provider = require('../models/Provider');
-
-
-/**
- * GET /add
- * Login page.
- */
-exports.add = (req, res) => {
-  const provider = new Provider;
-  provider.save();
-  res.render('check  db');
-};
+const mongoose = require('mongoose');
 
 /**
- * GET /login
- * Login page.
+ * POST /provider/new
  */
-exports.getLogin = (req, res) => {
-  if (req.provider) {
-    return res.redirect('/');
-  }
-  res.render('account/login', {
-    title: 'Login'
+
+exports.newProvider = (req, res) => {
+  mongoose.model('Provider').create({
+
   });
-};
+}
 
 /**
- * POST /login
+ * POST /provider/:id/increment
+ */
+
+ exports.increment = (req, res) => {
+  const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
+    if(err) {
+      return console.log(err);
+    } else {
+      provider.increment();
+    }
+  });
+ }
+
+/**
+ * POST /provider/:id/decrement
+ */
+
+ exports.decrement = (req, res) => {
+  const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
+    if(err) {
+      return console.log(err);
+    } else {
+      provider.decrement();
+    }
+  });
+ }
+
+/**
+ * POST /provider/:id/setBase
+ */
+
+ exports.setBase = (req, res) => {
+  const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
+    if(err) {
+      return console.log(err);
+    } else {
+      provider.setBase(req.body.setBase);
+    }
+  });
+ }
+
+
+/**
+ * POST /provider/login
  * Sign in using email and password.
  */
 exports.postLogin = (req, res, next) => {
@@ -40,15 +70,16 @@ exports.postLogin = (req, res, next) => {
   const errors = req.validationErrors();
 
   if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/login');
+    // req.flash('errors', errors);
+    // return res.redirect('/login');
+    res.json(er)
   }
 
   passport.authenticate('local', (err, provider, info) => {
     if (err) { return next(err); }
     if (!provider) {
-      req.flash('errors', info);
-      return res.redirect('/login');
+      // req.flash('errors', info);
+      return res.json(401, { "error": info.message});
     }
     req.logIn(provider, (err) => {
       if (err) { return next(err); }
@@ -64,27 +95,15 @@ exports.postLogin = (req, res, next) => {
  */
 exports.logout = (req, res) => {
   req.logout();
-  res.redirect('/');
+  // res.redirect('/');
 };
 
-/**
- * GET /signup
- * Signup page.
- */
-exports.getSignup = (req, res) => {
-  if (req.provider) {
-    return res.redirect('/');
-  }
-  res.render('account/signup', {
-    title: 'Create Account'
-  });
-};
 
 /**
- * POST /signup
- * Create a new local account.
+ * POST /provider/new
+ * Create a new account.
  */
-exports.postSignup = (req, res, next) => {
+exports.newProvider = (req, res, next) => {
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password must be at least 4 characters long').len(4);
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
@@ -93,20 +112,41 @@ exports.postSignup = (req, res, next) => {
   const errors = req.validationErrors();
 
   if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/signup');
+    // req.flash('errors', errors);
+    // return res.redirect('/signup');
+    return res.json({error : errors })
   }
 
   const provider = new Provider({
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    name: req.body.name,
+    phoneNumber: req.body.phoneNumber,
+    address: {
+      line1: req.body.address.line1,
+      line2: req.body.address.line2,
+      city: req.body.city,
+      zip: req.body.zip
+    },
+    acceptedClients: {
+      men: req.body.acceptedClients.men,
+      women: req.body.acceptedClients.women,
+      children: req.body.acceptedClients.children,
+      handicap: req.body.acceptedClients.handicap,
+      veteran: req.body.acceptedClients.veteran
+    },
+    totalBeds: req.body.totalBeds,
+    occupiedBeds: req.body.occupiedBeds,
+    intakeStart: req.body.intakeStart,
+    intakeEnd: req.body.intakeEnd,
+    description: req.body.description
   });
 
   Provider.findOne({ email: req.body.email }, (err, existingProvider) => {
     if (err) { return next(err); }
-    if (existingProvider) {
-      req.flash('errors', { msg: 'Account with that email address already exists.' });
-      return res.redirect('/signup');
+    if (existingProvider) 
+      return res.json({error: 'Account with that email address already exists.'});
+      // return res.redirect('/signup');
     }
     provider.save((err) => {
       if (err) { return next(err); }
@@ -114,56 +154,55 @@ exports.postSignup = (req, res, next) => {
         if (err) {
           return next(err);
         }
-        res.redirect('/');
+        // res.redirect('/');
       });
     });
   });
 };
 
-/**
- * GET /account
- * Profile page.
- */
-exports.getAccount = (req, res) => {
-  res.render('account/profile', {
-    title: 'Account Management'
-  });
-};
 
 /**
- * POST /account/profile
+ * POST /provider/:id/
  * Update profile information.
  */
-exports.postUpdateProfile = (req, res, next) => {
+exports.updateProvider = (req, res, next) => {
   req.assert('email', 'Please enter a valid email address.').isEmail();
   req.sanitize('email').normalizeEmail({ remove_dots: false });
 
   const errors = req.validationErrors();
 
   if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/account');
+    // req.flash('errors', errors);
+    // return res.redirect('/signup');
+    return res.json({error : errors })
   }
 
-  Provider.findById(req.provider.id, (err, provider) => {
-    if (err) { return next(err); }
-    provider.email = req.body.email || '';
-    provider.profile.name = req.body.name || '';
-    provider.profile.gender = req.body.gender || '';
-    provider.profile.location = req.body.location || '';
-    provider.profile.website = req.body.website || '';
-    provider.save((err) => {
-      if (err) {
-        if (err.code === 11000) {
-          req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
-          return res.redirect('/account');
-        }
-        return next(err);
-      }
-      req.flash('success', { msg: 'Profile information has been updated.' });
-      res.redirect('/account');
-    });
-  });
+ 
+  Provider.where({_id: req.id }).update({ $set : req.body }, function(err, provider) {
+      if (err) { return next(err); }
+      // return res.json(provider);
+  }); 
+
+  // Provider.findById(req.id, (err, provider) => {
+  //   if (err) { return next(err); }
+
+  //   provider.email = req.body.email || '';
+  //   provider.profile.name = req.body.name || '';
+  //   provider.profile.gender = req.body.gender || '';
+  //   provider.profile.location = req.body.location || '';
+  //   provider.profile.website = req.body.website || '';
+  //   provider.save((err) => {
+  //     if (err) {
+  //       if (err.code === 11000) {
+  //         req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
+  //         return res.redirect('/account');
+  //       }
+  //       return next(err);
+  //     }
+  //     req.flash('success', { msg: 'Profile information has been updated.' });
+  //     res.redirect('/account');
+  //   });
+  // });
 };
 
 /**
@@ -384,3 +423,42 @@ exports.postForgot = (req, res, next) => {
     res.redirect('/forgot');
   });
 };
+
+
+/**
+//  * GET /login
+//  * Login page.
+//  */
+// exports.getLogin = (req, res) => {
+//   if (req.provider) {
+//     return res.redirect('/');
+//   }
+//   res.render('account/login', {
+//     title: 'Login'
+//   });
+// };
+
+
+/**
+ * GET /signup
+ * Signup page.
+ */
+// exports.getSignup = (req, res) => {
+//   if (req.provider) {
+//     return res.redirect('/');
+//   }
+//   res.render('account/signup', {
+//     title: 'Create Account'
+//   });
+// };
+
+
+/**
+//  * GET /account
+//  * Profile page.
+//  */
+// exports.getAccount = (req, res) => {
+//   res.render('account/profile', {
+//     title: 'Account Management'
+//   });
+// };

@@ -115,8 +115,8 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 /**
  * Primary app routes.
  */
-app.get('/', homeController.index);
-app.get('/add', providerController.add);
+// app.get('/', homeController.index);
+// app.get('/add', providerController.add);
 // app.get('/login', userController.getLogin);
 // app.post('/login', userController.postLogin);
 // app.get('/logout', userController.logout);
@@ -133,6 +133,21 @@ app.get('/add', providerController.add);
 // app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 // app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 // app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
+
+/**
+ * Provider App Routes
+ */
+
+ app.get('/', homeController.index); 
+ app.post('/provider/new', providerController.newProvider);
+ app.update('/provider/:id', providerController.updateProvider);
+ app.delete('/provider/:id', providerController.deleteProvider);
+ app.post('/provider/login', providerController.login);
+ app.post('/provider/logout', providerController.logout);
+ app.post('/provider/:id/increment', providerController.increment);
+ app.post('/provider/:id/decrement', providerController.decrement);
+ app.post('/provider/:id/setBase', providerController.setBase);
+ 
 
 /**
  * API examples routes.
