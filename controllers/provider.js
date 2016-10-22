@@ -62,7 +62,7 @@ exports.newProvider = (req, res) => {
  * POST /provider/login
  * Sign in using email and password.
  */
-exports.postLogin = (req, res, next) => {
+exports.login = (req, res, next) => {
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password cannot be blank').notEmpty();
   req.sanitize('email').normalizeEmail({ remove_dots: false });
@@ -144,7 +144,7 @@ exports.newProvider = (req, res, next) => {
 
   Provider.findOne({ email: req.body.email }, (err, existingProvider) => {
     if (err) { return next(err); }
-    if (existingProvider) 
+    if (existingProvider) {
       return res.json({error: 'Account with that email address already exists.'});
       // return res.redirect('/signup');
     }
