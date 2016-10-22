@@ -3,10 +3,11 @@
  */
 const express = require('express');
 const compression = require('compression');
+const passport = require('passport');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const chalk = require('chalk');
+// const chalk = require('chalk');
 const errorHandler = require('errorhandler');
 const lusca = require('lusca');
 const dotenv = require('dotenv');
@@ -14,7 +15,6 @@ const MongoStore = require('connect-mongo')(session);
 const flash = require('express-flash');
 const path = require('path');
 const mongoose = require('mongoose');
-const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
@@ -30,7 +30,6 @@ dotenv.load({ path: '.env.example' });
  * Controllers (route handlers).
  */
 const homeController = require('./controllers/home');
-const userController = require('./controllers/user');
 const providerController = require('./controllers/provider');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
@@ -51,10 +50,10 @@ const app = express();
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
 mongoose.connection.on('connected', () => {
-  console.log('%s MongoDB connection established!', chalk.green('✓'));
+  console.log('%s MongoDB connection established!');
 });
 mongoose.connection.on('error', () => {
-  console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+  console.log('%s MongoDB connection error. Please make sure MongoDB is running.');
   process.exit();
 });
 
@@ -115,7 +114,6 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 /**
  * Passport authentication options
  */
-
 const expressJwt = require('express-jwt');
 const authenticate = expressJwt({secret: process.env.SECRET});
 
@@ -127,11 +125,13 @@ app.post('/login', passport.authenticate(
 /**
  * Primary app routes.
  */
+app.get('/me', authenticate, function(req, res) { 
+  res.status(200).json(req.user); 
+}); 
+/*
 app.get('/', homeController.index);
-app.get('/add', authenticate, providerController.add);
-app.get('/me', authenticate, function(req, res) {
-  res.status(200).json(req.user);
-});
+app.get('/add', authenticate, providerController.add);*/
+
 // app.get('/login', userController.getLogin);
 // app.post('/login', userController.postLogin);
 // app.get('/logout', userController.logout);
@@ -150,17 +150,32 @@ app.get('/me', authenticate, function(req, res) {
 // app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
 /**
+ * Provider App Routes
+ */
+
+ app.get('/', homeController.index); 
+ app.post('/provider/new', providerController.newProvider);
+ app.put('/provider/:id', providerController.updateProvider);
+ // app.delete('/provider/:id', providerController.deleteProvider);
+ app.post('/provider/login', providerController.login);
+ app.post('/provider/logout', providerController.logout);
+ app.post('/provider/:id/increment', providerController.increment);
+ app.post('/provider/:id/decrement', providerController.decrement);
+ app.post('/provider/:id/setBase', providerController.setBase);
+
+
+/**
  * API examples routes.
  */
 app.get('/api', apiController.getApi);
-app.get('/api/scraping', apiController.getScraping);
-app.get('/api/twilio', apiController.getTwilio);
-app.post('/api/twilio', apiController.postTwilio);
-app.get('/api/clockwork', apiController.getClockwork);
-app.post('/api/clockwork', apiController.postClockwork);
-app.get('/api/upload', apiController.getFileUpload);
-app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
-app.get('/api/google-maps', apiController.getGoogleMaps);
+// app.get('/api/scraping', apiController.getScraping);
+// app.get('/api/twilio', apiController.getTwilio);
+// app.post('/api/twilio', apiController.postTwilio);
+// app.get('/api/clockwork', apiController.getClockwork);
+// app.post('/api/clockwork', apiController.postClockwork);
+// app.get('/api/upload', apiController.getFileUpload);
+// app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
+// app.get('/api/google-maps', apiController.getGoogleMaps);
 
 
 /*app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));
@@ -177,7 +192,7 @@ app.use(errorHandler());
  * Start Express server.
  */
 app.listen(app.get('port'), () => {
-  console.log('%s Express server listening on port %d in %s mode.', chalk.green('✓'), app.get('port'), app.get('env'));
+  console.log('%s Express server listening on port %d in %s mode.', app.get('port'), app.get('env'));
 });
 
 module.exports = app;

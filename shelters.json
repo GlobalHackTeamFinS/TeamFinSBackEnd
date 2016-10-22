@@ -1,0 +1,251 @@
+
+  {
+    "id": "abc663f8-ed35-4e69-ba5f-99233cfa1425",
+    "provider": "TASMANIA",
+    "email": "andrewsoconnor@tasmania.com",
+    "phone": "+1 (811) 460-2529",
+    "address": {
+      "firstLine": "720 Maple Street",
+      "secondLine": null,
+      "city": "Shindler",
+      "state": "Montana",
+      "zip": 43598
+    },
+    "registered": "2014-07-16T11:47:19 +05:00",
+    "gpsLocation": {
+      "latitude": -29.482529,
+      "longitude": 76.345011
+    },
+    "milesAway": 3.6774,
+    "acceptedClients": 1,
+    "totalBeds": 51,
+    "occupiedBeds": 51,
+    "intakeStart": 1201,
+    "intakeEnd": 1321,
+    "description": "Minim ad et reprehenderit excepteur et consectetur voluptate cillum ea labore enim. Labore dolore non ea reprehenderit sint eiusmod adipisicing. Ut qui voluptate est irure id consectetur do enim. Do ullamco exercitation enim consequat sit nulla pariatur ex aute nisi id. Non do enim ea ex ea enim occaecat reprehenderit adipisicing et cillum eu consectetur.\r\n"
+  },
+  {
+    "id": "1e112620-eedc-44d7-a9d6-8b635a1a2e31",
+    "provider": "MANUFACT",
+    "email": "andrewsoconnor@manufact.com",
+    "phone": "+1 (952) 502-2738",
+    "address": {
+      "firstLine": "552 Cranberry Street",
+      "secondLine": null,
+      "city": "Gilgo",
+      "state": "Texas",
+      "zip": 27680
+    },
+    "registered": "2014-12-12T07:27:07 +06:00",
+    "gpsLocation": {
+      "latitude": 57.12538,
+      "longitude": 47.600852
+    },
+    "milesAway": 7.3703,
+    "acceptedClients": 7,
+    "totalBeds": 36,
+    "occupiedBeds": 26,
+    "intakeStart": 1209,
+    "intakeEnd": 1329,
+    "description": "Nisi aliqua velit sint velit nisi in. Fugiat ut culpa do fugiat ex velit id fugiat. Do amet pariatur deserunt id excepteur occaecat adipisicing. Aliquip eiusmod nulla cillum veniam in cupidatat aute. Ad minim cupidatat dolore id non dolore culpa nulla dolore non cillum est. Cupidatat nisi cillum irure occaecat irure proident. Ex officia eu enim laborum elit excepteur Lorem aliquip irure.\r\n"
+  },
+  {
+    "id": "f24c97c8-21f3-4e46-af2c-81f9c63ecea1",
+    "provider": "POLARIUM",
+    "email": "andrewsoconnor@polarium.com",
+    "phone": "+1 (978) 495-3762",
+    "address": {
+      "firstLine": "545 Maujer Street",
+      "secondLine": null,
+      "city": "Oneida",
+      "state": "Iowa",
+      "zip": 17881
+    },
+    "registered": "2016-07-27T06:08:09 +05:00",
+    "gpsLocation": {
+      "latitude": -54.535418,
+      "longitude": 63.492526
+    },
+    "milesAway": 1.3865,
+    "acceptedClients": 6,
+    "totalBeds": 73,
+    "occupiedBeds": 46,
+    "intakeStart": 1163,
+    "intakeEnd": 1283,
+    "description": "Incididunt ut sunt enim adipisicing nisi exercitation occaecat laborum exercitation adipisicing dolor incididunt aute magna. Sit eiusmod adipisicing sint minim ullamco laborum elit ad elit do reprehenderit consequat. Dolor fugiat exercitation commodo dolor officia do consequat. Excepteur voluptate incididunt nisi consectetur et in ipsum commodo laborum consectetur. Sint cillum id id eu sunt velit. Et sint aliqua nostrud tempor irure voluptate sunt mollit laboris aliquip pariatur mollit. Sunt enim fugiat non sint et elit exercitation et.\r\n"
+  },
+  {
+    "id": "7f19c402-2f18-4985-a68c-7019d604837a",
+    "provider": "EXTREMO",
+    "email": "andrewsoconnor@extremo.com",
+    "phone": "+1 (855) 418-2015",
+    "address": {
+      "firstLine": "895 Henry Street",
+      "secondLine": null,
+      "city": "Richville",
+      "state": "Alaska",
+      "zip": 10273
+    },
+    "registered": "2015-02-02T12:35:38 +06:00",
+    "gpsLocation": {
+      "latitude": 45.529042,
+      "longitude": -63.225502
+    },
+    "milesAway": 7.0226,
+    "acceptedClients": 10,
+    "totalBeds": 34,
+    "occupiedBeds": 4,
+    "intakeStart": 1218,
+    "intakeEnd": 1338,
+    "description": "Non velit do nulla tempor cupidatat. Aute magna elit ad pariatur laborum ad consectetur dolore. Culpa nostrud ullamco nulla labore ut cillum esse nulla sint minim dolore et culpa. Proident elit ad sint et qui laboris dolor deserunt cupidatat mollit esse culpa officia qui. Ad nisi nulla irure reprehenderit consectetur excepteur mollit laboris elit dolor irure enim cupidatat. Dolor dolor elit ullamco velit consectetur elit sunt sunt id consequat. Occaecat nostrud in voluptate anim exercitation et adipisicing esse nostrud sit.\r\n"
+  },
+  {
+    "id": "23351ea1-1b6d-4fe4-b947-b00a008fbb28",
+    "provider": "ISOLOGIA",
+    "email": "andrewsoconnor@isologia.com",
+    "phone": "+1 (943) 583-3222",
+    "address": {
+      "firstLine": "636 Dank Court",
+      "secondLine": null,
+      "city": "Blanco",
+      "state": "Oklahoma",
+      "zip": 96732
+    },
+    "registered": "2014-05-27T12:57:39 +05:00",
+    "gpsLocation": {
+      "latitude": 26.391146,
+      "longitude": 33.824504
+    },
+    "milesAway": 2.0355,
+    "acceptedClients": 7,
+    "totalBeds": 80,
+    "occupiedBeds": 61,
+    "intakeStart": 1144,
+    "intakeEnd": 1264,
+    "description": "Proident duis exercitation esse qui elit nostrud proident adipisicing tempor ea. Laborum adipisicing ad pariatur Lorem amet elit do culpa eu sunt. Exercitation culpa officia et nostrud incididunt est consequat cupidatat aliqua commodo. Nisi culpa ea veniam incididunt sint non laboris excepteur do cillum ex excepteur cillum. Labore commodo laboris id aliqua do.\r\n"
+  },
+  {
+    "id": "6dd93bb7-1c40-4b35-82ae-cf2af824a3ef",
+    "provider": "ZYPLE",
+    "email": "andrewsoconnor@zyple.com",
+    "phone": "+1 (978) 555-2192",
+    "address": {
+      "firstLine": "534 Greenwood Avenue",
+      "secondLine": null,
+      "city": "Cascades",
+      "state": "Kentucky",
+      "zip": 87139
+    },
+    "registered": "2015-09-17T09:04:23 +05:00",
+    "gpsLocation": {
+      "latitude": -74.658905,
+      "longitude": 19.211058
+    },
+    "milesAway": 6.6073,
+    "acceptedClients": 3,
+    "totalBeds": 67,
+    "occupiedBeds": 58,
+    "intakeStart": 1208,
+    "intakeEnd": 1328,
+    "description": "Sunt dolor ullamco do est fugiat pariatur et ea sint. Culpa adipisicing culpa ad dolor eiusmod dolor id sint sit reprehenderit ea amet qui. Eu dolor eiusmod adipisicing amet consequat aute duis commodo minim sit aliquip nostrud laboris magna. Id labore in exercitation aliqua duis quis in adipisicing minim enim ut nisi. Do incididunt et officia labore duis exercitation non reprehenderit sint adipisicing occaecat. Irure excepteur fugiat ad enim ipsum labore velit eiusmod voluptate fugiat officia.\r\n"
+  },
+  {
+    "id": "002a4491-cded-4aa5-ba75-a68a52736118",
+    "provider": "ESSENSIA",
+    "email": "andrewsoconnor@essensia.com",
+    "phone": "+1 (921) 599-2336",
+    "address": {
+      "firstLine": "459 Rutland Road",
+      "secondLine": null,
+      "city": "Kohatk",
+      "state": "Federated States Of Micronesia",
+      "zip": 80276
+    },
+    "registered": "2016-10-15T03:55:04 +05:00",
+    "gpsLocation": {
+      "latitude": -47.566168,
+      "longitude": -131.710148
+    },
+    "milesAway": 4.8339,
+    "acceptedClients": 9,
+    "totalBeds": 83,
+    "occupiedBeds": 65,
+    "intakeStart": 1123,
+    "intakeEnd": 1243,
+    "description": "Proident consequat exercitation irure adipisicing amet exercitation dolor proident voluptate sint. Aute ea mollit non cillum proident incididunt. Minim ut cillum enim ullamco. Laborum esse officia adipisicing ex esse consectetur minim Lorem excepteur eiusmod proident quis incididunt. Aliqua esse labore consequat proident labore anim ut labore incididunt.\r\n"
+  },
+  {
+    "id": "fdbc3df9-9407-49fc-bf36-67ae79be4056",
+    "provider": "ACRUEX",
+    "email": "andrewsoconnor@acruex.com",
+    "phone": "+1 (818) 447-2498",
+    "address": {
+      "firstLine": "872 Harwood Place",
+      "secondLine": null,
+      "city": "Marne",
+      "state": "Utah",
+      "zip": 66518
+    },
+    "registered": "2016-07-19T02:10:48 +05:00",
+    "gpsLocation": {
+      "latitude": 34.922373,
+      "longitude": -19.718835
+    },
+    "milesAway": 4.5613,
+    "acceptedClients": 8,
+    "totalBeds": 81,
+    "occupiedBeds": 65,
+    "intakeStart": 1247,
+    "intakeEnd": 1367,
+    "description": "Dolor irure ipsum sint et Lorem in adipisicing esse enim consequat cillum consectetur reprehenderit. Eu non dolore anim quis. Cupidatat dolor esse quis nisi. Elit amet laborum ut esse quis mollit. Ad ea qui nisi elit reprehenderit reprehenderit eu tempor cupidatat. Minim culpa culpa sit officia mollit amet culpa excepteur dolore et minim.\r\n"
+  },
+  {
+    "id": "3933c9e8-558e-41c6-a891-fad915eaa5a6",
+    "provider": "LEXICONDO",
+    "email": "andrewsoconnor@lexicondo.com",
+    "phone": "+1 (877) 508-2427",
+    "address": {
+      "firstLine": "213 Lott Place",
+      "secondLine": null,
+      "city": "Allendale",
+      "state": "Hawaii",
+      "zip": 75917
+    },
+    "registered": "2016-09-25T09:22:19 +05:00",
+    "gpsLocation": {
+      "latitude": 54.172349,
+      "longitude": -121.715242
+    },
+    "milesAway": 9.0528,
+    "acceptedClients": 2,
+    "totalBeds": 81,
+    "occupiedBeds": 80,
+    "intakeStart": 1124,
+    "intakeEnd": 1244,
+    "description": "Est occaecat anim aliqua tempor nisi in irure non. Laborum ullamco amet exercitation labore tempor anim nisi nisi non duis occaecat. Adipisicing id sit fugiat ullamco est tempor anim consequat nulla cupidatat.\r\n"
+  },
+  {
+    "id": "76b5e164-1dc9-4eba-bef2-145b9fd9941f",
+    "provider": "COLAIRE",
+    "email": "andrewsoconnor@colaire.com",
+    "phone": "+1 (828) 551-2631",
+    "address": {
+      "firstLine": "652 Berkeley Place",
+      "secondLine": null,
+      "city": "Idamay",
+      "state": "Palau",
+      "zip": 38206
+    },
+    "registered": "2016-09-30T10:51:18 +05:00",
+    "gpsLocation": {
+      "latitude": 0.573546,
+      "longitude": 31.642767
+    },
+    "milesAway": 1.4438,
+    "acceptedClients": 7,
+    "totalBeds": 32,
+    "occupiedBeds": 28,
+    "intakeStart": 1200,
+    "intakeEnd": 1320,
+    "description": "Reprehenderit et ipsum minim consectetur. Elit fugiat minim nostrud amet commodo aliqua sit tempor mollit fugiat aliquip consectetur. Reprehenderit occaecat ex nulla in irure do qui. Proident minim aliquip qui magna quis culpa duis cillum cupidatat. Proident pariatur dolor esse ad non labore cillum ad aliqua incididunt qui aute. Lorem duis dolore voluptate eu sint mollit excepteur.\r\n"
+  }

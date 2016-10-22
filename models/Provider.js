@@ -6,7 +6,7 @@ const Float = require('mongoose-float').loadType(mongoose);
 const providerSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   name: { type: String, default: null },
-  phoneNumber: { type: Number, default: 0000000000 },
+  phoneNumber: { type: String, default: null },
   password: String,
   passwordResetToken: String,
   passwordResetExpires: Date,
@@ -35,6 +35,26 @@ const providerSchema = new mongoose.Schema({
   intakeEnd: { type: Number, default: 0 },
   description: { type: String, default: null }
 }, { timestamps: true });
+
+
+
+
+// providerSchema.methods.increment = function(){
+//   // get from db Total beds do not exceed this value
+//   this.occupiedBeds += 1;
+//   this.save();
+// }
+
+// providerSchema.methods.decrement = function(){
+//   // don't be less than zero beds ocupado
+//   this.occupiedBeds -= 1;
+//   this.save();
+// }
+
+// providerSchema.methods.setBase = function(occupiedBeds){
+//   this.occupiedBeds = occupiedBeds;
+//   this.save();
+// }
 
 /**
  * Password hash middleware.
