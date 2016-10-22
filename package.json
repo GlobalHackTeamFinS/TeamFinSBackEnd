@@ -1,9 +1,9 @@
 {
-  "name": "hackathon-starter",
-  "version": "4.2.1",
+  "name": "team-fins",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sahat/hackathon-starter.git"
+    "url": "https://github.com/GlobalHackTeamFinS/TeamFinSBackEnd.git"
   },
   "scripts": {
     "start": "node app.js",
@@ -27,6 +27,7 @@
     "lodash": "^4.15.0",
     "lusca": "^1.4.1",
     "mongoose": "^4.6.0",
+    "mongoose-float": "^1.0.2",
     "morgan": "^1.7.0",
     "multer": "^1.2.0",
     "node-sass-middleware": "^0.9.8",
