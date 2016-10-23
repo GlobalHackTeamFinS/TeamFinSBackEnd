@@ -293,10 +293,10 @@ exports.postUpdatePassword = (req, res, next) => {
 };
 
 /**
- * POST /account/delete
+ * DELETE /provider/:id
  * Delete provider account.
  */
-exports.postDeleteAccount = (req, res, next) => {
+exports.deleteProvider = (req, res, next) => {
   Provider.remove({ _id: req.provider.id }, (err) => {
     if (err) { return next(err); }
     req.logout();
