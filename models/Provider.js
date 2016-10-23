@@ -70,16 +70,17 @@ providerSchema.pre('save', function (next) {
   });
 });
 
-/*providerSchema.pre('save', function(next) {
+providerSchema.pre('save', function(next) {
   var doc = this;
-  geocoder.geocode(this.address, function ( err, data ) {
+  var address = this.address.line1+" "+this.address.city+", "+this.address.state+", "+this.address.zip;
+  geocoder.geocode({address: address}, function ( err, data ) {
     if(data && data.status == 'OK'){
       doc.gpsLocation.latitude = data.results[0].geometry.location.lat;
       doc.gpsLocation.longitude = data.results[0].geometry.location.lng;
     }
     next();
   });
-});*/
+});
 /**
  * Helper method for validating provider's password.
  */
