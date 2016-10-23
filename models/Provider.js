@@ -11,10 +11,11 @@ const providerSchema = new mongoose.Schema({
   passwordResetToken: String,
   passwordResetExpires: Date,
   tokens: Array,
-  gpsLocation: {
-    latitude: { type: Float, default: 0 },
-    longitude: { type: Float, default: 0 }
-  },
+  // gpsLocation: {
+  //   latitude: { type: Float, default: 0 },
+  //   longitude: { type: Float, default: 0 }
+  // },
+  gpsLocation: { type: [Number], index: '2dsphere', default: [-90.2535793, 38.6346583] },
   address: {
     line1: { type: String, default: null },
     line2: { type: String, default: null },
