@@ -50,11 +50,11 @@ exports.respond = function(req, res){
  exports.increment = (req, res) => {
   if(verify(req.params.id, req.user.id)){
     Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : 1 } } )
-      .exec(function(err, db_res) {
-      if (err) {
-        throw err;
-      }
-      else {
+      .exec(function(err, db_res) { 
+      if (err) { 
+        throw err; 
+      } 
+      else { 
         res.status(200).json({
           provider: db_res
         });
@@ -80,10 +80,10 @@ exports.respond = function(req, res){
  exports.decrement = (req, res) => {
   if(verify(req.params.id, req.user.id)){
     Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : -1 } } )
-      .exec(function(err, db_res) {
-        if (err) {
-          throw err;
-        } else {
+      .exec(function(err, db_res) { 
+        if (err) { 
+          throw err; 
+        } else { 
           res.status(200).json({
             provider: db_res
           });
@@ -108,11 +108,11 @@ exports.respond = function(req, res){
  exports.setBase = (req, res) => {
   if(verify(req.params.id, req.user.id)){
     Provider.findOneAndUpdate(req.id, { $set : { occupiedBeds : parseInt(req.body.setBase) } } )
-      .exec(function(err, db_res) {
-      if (err) {
-        throw err;
-      }
-      else {
+      .exec(function(err, db_res) { 
+      if (err) { 
+        throw err; 
+      } 
+      else { 
         res.status(200).json({
           provider: db_res
         });
@@ -187,7 +187,6 @@ exports.logout = (req, res) => {
  * Create a new account.
  */
 exports.newProvider = (req, res, next) => {
-
   req.assert('email', 'Email is not valid').isEmail();
   // req.assert('password', 'Password must be at least 4 characters long').len(4);
   // req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
@@ -247,12 +246,17 @@ exports.updateProvider = (req, res, next) => {
       return res.json({error : errors })
     }
     Provider.where({_id: req.params.id }).update({ $set : req.body }, function(err, provider) {
-        if (err) { return next(err); }
-        //return res.json(provider);
-        res.send(200).json(provider);
-    });
+      if (err) { return next(err); }
+        Provider.findById({_id: req.params.id}, (err, updated) => {
+          if(err) { return next(err); }
+            res.json({updated: updated});
+        });
 
-    // Provider.findById(req.params.id, (err, provider) => {
+      });
+        //res.json(Provider.where({_id: req.params.id}));
+    // }); 
+
+    // Provider.findById(req.id, (err, provider) => {
     //   if (err) { return next(err); }
 
     //   provider.email = req.body.email || '';
@@ -484,10 +488,10 @@ exports.deleteProvider = (req, res, next) => {
 const verify = function(requestedId, decodedId){
   if (requestedId == decodedId){
     return true;
-   } else {
-     return false;
-   }
- };
+  } else {
+    return false;
+  }
+};
 
 /**
 //  * GET /login
