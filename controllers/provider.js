@@ -481,13 +481,13 @@ exports.deleteProvider = (req, res, next) => {
 //   });
 // };
 
-// const verify = function(requestedId, decodedId){
-//   if (requestedId == decodedId){
-//     return true;
-//   } else {
-//     return false;
-//   }
-// };
+const verify = function(requestedId, decodedId){
+  if (requestedId == decodedId){
+    return true;
+   } else {
+     return false;
+   }
+ };
 
 /**
 //  * GET /login
