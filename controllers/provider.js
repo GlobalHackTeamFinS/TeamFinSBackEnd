@@ -79,7 +79,7 @@ exports.respond = function(req, res){
  */
 
  exports.decrement = (req, res) => {
-  //if(verify(req.params.id, req.user.id)){
+  if(verify(req.params.id, req.user.id)){
     Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : -1 } } )
       .exec(function(err, db_res) { 
         if (err) { 
