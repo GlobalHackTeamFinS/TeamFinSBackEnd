@@ -168,7 +168,7 @@ app.get('/add', authenticate, providerController.add);*/
  */
 
  app.get('/', homeController.index);
- app.get('/dashboard', homeController.dashboard);
+ // app.get('/dashboard', homeController.dashboard);
  app.post('/provider/new', providerController.newProvider);
  app.put('/provider/:id', authenticate, providerController.updateProvider);
  // app.delete('/provider/:id', providerController.deleteProvider);
