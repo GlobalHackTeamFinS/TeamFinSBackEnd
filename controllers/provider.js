@@ -56,7 +56,9 @@ exports.respond = function(req, res){
       } 
       else { 
         console.log(db_res); 
-        res.send(200);
+        res.status(200).json({
+          provider: db_res
+        });
       } 
     });
     }else{
@@ -77,14 +79,16 @@ exports.respond = function(req, res){
  */
 
  exports.decrement = (req, res) => {
-  if(verify(req.params.id, req.user.id)){
+  //if(verify(req.params.id, req.user.id)){
     Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : -1 } } )
       .exec(function(err, db_res) { 
         if (err) { 
           throw err; 
         } else { 
           console.log(db_res); 
-          res.send(200);
+          res.status(200).json({
+            provider: db_res
+          });
         }
     });
   }else{
@@ -113,7 +117,9 @@ exports.respond = function(req, res){
       } 
       else { 
         console.log(db_res); 
-        res.send(200);
+        res.status(200).json({
+          provider: db_res
+        });
       }
     }); 
     } else {
