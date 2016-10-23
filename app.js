@@ -168,8 +168,8 @@ app.get('/add', authenticate, providerController.add);*/
  */
 
  app.get('/', homeController.index); 
- app.post('/provider/new', authenticate, providerController.newProvider);
- app.put('/provider/:id', providerController.updateProvider);
+ app.post('/provider/new', providerController.newProvider);
+ app.put('/provider/:id', authenticate, providerController.updateProvider);
  // app.delete('/provider/:id', providerController.deleteProvider);
  app.post('/provider/login', providerController.login);
  app.post('/provider/logout', providerController.logout);

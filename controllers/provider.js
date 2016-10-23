@@ -147,16 +147,16 @@ exports.login = (req, res, next) => {
     }*/
     req.logIn(provider, (err) => {
       if (err) { return next(err); }
-      req.token = jwt.sign({
-        id: provider._id,
-      }, process.env.SECRET),
-      { noTimeStamp: true };
-      //next();
-      req.flash('success', { msg: 'Success! You are logged in.' });
-      res.status(200).json({
-        provider: req.provider,
-        token: req.token
-      });
+    req.token = jwt.sign({
+      id: provider._id,
+    }, process.env.SECRET),
+    { noTimeStamp: true };
+    //next();
+    req.flash('success', { msg: 'Success! You are logged in.' });
+    res.status(200).json({
+      provider: req.provider,
+      token: req.token
+    });
       //res.redirect(req.session.returnTo || '/');
     });
   })(req, res, next);
@@ -190,12 +190,7 @@ exports.newProvider = (req, res, next) => {
     // return res.redirect('/signup');
     return res.json({error : errors })
   }
-
-
-
   const provider = new Provider(req.body);
-
-
   Provider.findOne({ email: req.body.email }, (err, existingProvider) => {
     if (err) { return next(err); }
     if (existingProvider) {
@@ -208,7 +203,16 @@ exports.newProvider = (req, res, next) => {
         if (err) {
           return next(err);
         }
-        res.send(200);
+        req.token = jwt.sign({
+          id: provider._id,
+        }, process.env.SECRET),
+        { noTimeStamp: true };
+        //next();
+        req.flash('success', { msg: 'Success! You are logged in.' });
+        res.status(200).json({
+          provider: req.provider,
+          token: req.token
+        });
         // res.redirect('/');
       });
     });
