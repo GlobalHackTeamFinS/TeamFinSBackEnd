@@ -48,16 +48,20 @@ exports.respond = function(req, res){
  */
 
  exports.increment = (req, res) => {
-  Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : 1 } } )
-    .exec(function(err, db_res) { 
-    if (err) { 
-      throw err; 
-    } 
-    else { 
-      console.log(db_res); 
-      res.send(200);
-    } 
-  });
+  if(verify(req.params.id, req.user.id)){
+    Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : 1 } } )
+      .exec(function(err, db_res) { 
+      if (err) { 
+        throw err; 
+      } 
+      else { 
+        console.log(db_res); 
+        res.send(200);
+      } 
+    });
+    }else{
+      res.send(404);
+    }
   // const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
   //   if(err) {
   //     return console.log(err);
@@ -132,19 +136,28 @@ exports.login = (req, res, next) => {
   if (errors) {
     // req.flash('errors', errors);
     // return res.redirect('/login');
-    res.json(er)
+    res.json(errors);
   }
 
-  passport.authenticate('local', (err, provider, info) => {
+  passport.authenticate('local', { session: false}, (err, provider, info) => {
     if (err) { return next(err); }
-    if (!provider) {
+    /*if (!provider) {
       // req.flash('errors', info);
       return res.json(401, { "error": info.message});
-    }
+    }*/
     req.logIn(provider, (err) => {
       if (err) { return next(err); }
+      req.token = jwt.sign({
+        id: provider._id,
+      }, process.env.SECRET),
+      { noTimeStamp: true };
+      //next();
       req.flash('success', { msg: 'Success! You are logged in.' });
-      res.redirect(req.session.returnTo || '/');
+      res.status(200).json({
+        provider: req.provider,
+        token: req.token
+      });
+      //res.redirect(req.session.returnTo || '/');
     });
   })(req, res, next);
 };
@@ -468,7 +481,13 @@ exports.postForgot = (req, res, next) => {
   });
 };
 
-
+const verify = function(requestedId, decodedId){
+  if (requestedId == decodedId){
+    return true;
+  } else {
+    return false;
+  }
+};
 /**
 //  * GET /login
 //  * Login page.

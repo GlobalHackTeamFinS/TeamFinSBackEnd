@@ -5,13 +5,13 @@ const LocalStrategy = require('passport-local').Strategy;
 const OAuthStrategy = require('passport-oauth').OAuthStrategy;
 const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 
-
+const Provider = require('../models/Provider');
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
+  Provider.findById(id, (err, user) => {
     done(err, user);
   });
 });
@@ -20,7 +20,7 @@ passport.deserializeUser((id, done) => {
  * Sign in using Email and Password.
  */
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-  User.findOne({ email: email.toLowerCase() }, (err, user) => {
+  Provider.findOne({ email: email.toLowerCase() }, (err, user) => {
     if (err) { return done(err); }
     if (!user) {
       return done(null, false, { msg: `Email ${email} not found.` });
@@ -35,32 +35,14 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
   });
 }));
 
-passport.use(new LocalStrategy(  
-  function(username, password, done) {
-    // database dummy - find user and verify password
-    if(username === 'edwin.kohl' && password === 'pass'){
-      done(null, {
-        id: 123,
-        firstname: 'edwin',
-        lastname: 'kohl',
-        email: 'edwin.kohl@manifest.com',
-        verified: true
-      });
-    }
-    else {
-      done(null, false);
-    }
-  }
-));
-
 /**
  * OAuth Strategy Overview
  *
- * - User is already logged in.
+ * - Provider is already logged in.
  *   - Check if there is an existing account with a provider id.
  *     - If there is, return an error message. (Account merging not supported)
  *     - Else link new OAuth account with currently logged-in user.
- * - User is not logged in.
+ * - Provider is not logged in.
  *   - Check if it's a returning user.
  *     - If returning user, sign in and we are done.
  *     - Else check if there is an existing account with user's email.

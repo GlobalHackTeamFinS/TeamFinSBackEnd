@@ -117,15 +117,29 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 const expressJwt = require('express-jwt');
 const authenticate = expressJwt({secret: process.env.SECRET});
 
-app.post('/login', passport.authenticate(  
+/*const verify = function(requestedId, decodedId){
+  if (requestedId == decodedId){
+    next(true);
+  } else {
+    next(new Error("Permission denied."));
+  }
+}*/
+
+/*const verify = function(token, secret) {
+  jwt.verify(token, secret);
+}*/
+
+/*app.post('/provider/login', passport.authenticate(  
   'local', {
     session: false
-  }), providerController.serialize, providerController.generateToken, providerController.respond);
+  }));
+*/
 
 /**
  * Primary app routes.
  */
 app.get('/me', authenticate, function(req, res) { 
+  console.log(req.user);
   res.status(200).json(req.user); 
 }); 
 /*
@@ -154,13 +168,13 @@ app.get('/add', authenticate, providerController.add);*/
  */
 
  app.get('/', homeController.index); 
- app.post('/provider/new', providerController.newProvider);
+ app.post('/provider/new', authenticate, providerController.newProvider);
  app.put('/provider/:id', providerController.updateProvider);
  // app.delete('/provider/:id', providerController.deleteProvider);
  app.post('/provider/login', providerController.login);
  app.post('/provider/logout', providerController.logout);
- app.post('/provider/:id/increment', providerController.increment);
- app.post('/provider/:id/decrement', providerController.decrement);
+ app.post('/provider/:id/increment', authenticate, providerController.increment);
+ app.post('/provider/:id/decrement', authenticate, providerController.decrement);
  app.post('/provider/:id/setBase', providerController.setBase);
 
 
@@ -192,7 +206,7 @@ app.use(errorHandler());
  * Start Express server.
  */
 app.listen(app.get('port'), () => {
-  console.log('%s Express server listening on port %d in %s mode.', app.get('port'), app.get('env'));
+  console.log('Express server listening on port %d in %s mode.', app.get('port'), app.get('env'));
 });
 
 module.exports = app;
