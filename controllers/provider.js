@@ -55,7 +55,6 @@ exports.respond = function(req, res){
         throw err; 
       } 
       else { 
-        console.log(db_res); 
         res.status(200).json({
           provider: db_res
         });
@@ -85,7 +84,6 @@ exports.respond = function(req, res){
         if (err) { 
           throw err; 
         } else { 
-          console.log(db_res); 
           res.status(200).json({
             provider: db_res
           });
@@ -109,14 +107,12 @@ exports.respond = function(req, res){
 
  exports.setBase = (req, res) => {
   if(verify(req.params.id, req.user.id)){
-    console.log(req.body);
     Provider.findOneAndUpdate(req.id, { $set : { occupiedBeds : parseInt(req.body.setBase) } } )
       .exec(function(err, db_res) { 
       if (err) { 
         throw err; 
       } 
       else { 
-        console.log(db_res); 
         res.status(200).json({
           provider: db_res
         });
@@ -167,7 +163,7 @@ exports.login = (req, res, next) => {
     //next();
     req.flash('success', { msg: 'Success! You are logged in.' });
     res.status(200).json({
-      provider: req.provider,
+      provider: provider,
       token: req.token
     });
       //res.redirect(req.session.returnTo || '/');
@@ -191,7 +187,6 @@ exports.logout = (req, res) => {
  * Create a new account.
  */
 exports.newProvider = (req, res, next) => {
-  console.log(req.body);
   req.assert('email', 'Email is not valid').isEmail();
   // req.assert('password', 'Password must be at least 4 characters long').len(4);
   // req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
@@ -224,7 +219,7 @@ exports.newProvider = (req, res, next) => {
         //next();
         req.flash('success', { msg: 'Success! You are logged in.' });
         res.status(200).json({
-          provider: req.provider,
+          provider: provider,
           token: req.token
         });
         // res.redirect('/');
@@ -250,14 +245,16 @@ exports.updateProvider = (req, res, next) => {
       // return res.redirect('/signup');
       return res.json({error : errors })
     }
-
-   console.log(req.body)
-   console.log(req);
     Provider.where({_id: req.params.id }).update({ $set : req.body }, function(err, provider) {
-        if (err) { return next(err); }
-        // return res.json(provider);
-        res.send(200);
-    }); 
+      if (err) { return next(err); }
+        Provider.findById({_id: req.params.id}, (err, updated) => {
+          if(err) { return next(err); }
+            res.json({updated: updated});
+        });
+
+      });
+        //res.json(Provider.where({_id: req.params.id}));
+    // }); 
 
     // Provider.findById(req.id, (err, provider) => {
     //   if (err) { return next(err); }
@@ -488,13 +485,13 @@ exports.deleteProvider = (req, res, next) => {
 //   });
 // };
 
-// const verify = function(requestedId, decodedId){
-//   if (requestedId == decodedId){
-//     return true;
-//   } else {
-//     return false;
-//   }
-// };
+const verify = function(requestedId, decodedId){
+  if (requestedId == decodedId){
+    return true;
+  } else {
+    return false;
+  }
+};
 
 /**
 //  * GET /login
