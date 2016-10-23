@@ -129,7 +129,7 @@ const authenticate = expressJwt({secret: process.env.SECRET});
   jwt.verify(token, secret);
 }*/
 
-/*app.post('/provider/login', passport.authenticate(  
+/*app.post('/provider/login', passport.authenticate(
   'local', {
     session: false
   }));
@@ -138,10 +138,10 @@ const authenticate = expressJwt({secret: process.env.SECRET});
 /**
  * Primary app routes.
  */
-app.get('/me', authenticate, function(req, res) { 
+app.get('/me', authenticate, function(req, res) {
   console.log(req.user);
-  res.status(200).json(req.user); 
-}); 
+  res.status(200).json(req.user);
+});
 /*
 app.get('/', homeController.index);
 app.get('/add', authenticate, providerController.add);*/
@@ -167,7 +167,8 @@ app.get('/add', authenticate, providerController.add);*/
  * Provider App Routes
  */
 
- app.get('/', homeController.index); 
+ app.get('/', homeController.index);
+ app.get('/dashboard', homeController.dashboard);
  app.post('/provider/new', providerController.newProvider);
  app.put('/provider/:id', authenticate, providerController.updateProvider);
  // app.delete('/provider/:id', providerController.deleteProvider);
