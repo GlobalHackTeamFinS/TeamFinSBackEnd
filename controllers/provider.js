@@ -248,8 +248,8 @@ exports.updateProvider = (req, res, next) => {
     }
     Provider.where({_id: req.params.id }).update({ $set : req.body }, function(err, provider) {
         if (err) { return next(err); }
-        // return res.json(provider);
-        res.send(200);
+        //return res.json(provider);
+        res.send(200).json(provider);
     });
 
     // Provider.findById(req.id, (err, provider) => {
