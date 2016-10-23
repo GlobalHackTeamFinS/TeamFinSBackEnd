@@ -56,7 +56,9 @@ exports.respond = function(req, res){
       } 
       else { 
         console.log(db_res); 
-        res.send(200);
+        res.status(200).json({
+          provider: db_res
+        });
       } 
     });
     }else{
@@ -84,7 +86,9 @@ exports.respond = function(req, res){
           throw err; 
         } else { 
           console.log(db_res); 
-          res.send(200);
+          res.status(200).json({
+            provider: db_res
+          });
         }
     });
   }else{
@@ -113,7 +117,9 @@ exports.respond = function(req, res){
       } 
       else { 
         console.log(db_res); 
-        res.send(200);
+        res.status(200).json({
+          provider: db_res
+        });
       }
     }); 
     } else {
