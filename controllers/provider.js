@@ -50,16 +50,16 @@ exports.respond = function(req, res){
  exports.increment = (req, res) => {
   if(verify(req.params.id, req.user.id)){
     Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : 1 } } )
-      .exec(function(err, db_res) { 
-      if (err) { 
-        throw err; 
-      } 
-      else { 
-        console.log(db_res); 
+      .exec(function(err, db_res) {
+      if (err) {
+        throw err;
+      }
+      else {
+        console.log(db_res);
         res.status(200).json({
           provider: db_res
         });
-      } 
+      }
     });
     }else{
       res.send(404);
@@ -81,11 +81,11 @@ exports.respond = function(req, res){
  exports.decrement = (req, res) => {
   if(verify(req.params.id, req.user.id)){
     Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : -1 } } )
-      .exec(function(err, db_res) { 
-        if (err) { 
-          throw err; 
-        } else { 
-          console.log(db_res); 
+      .exec(function(err, db_res) {
+        if (err) {
+          throw err;
+        } else {
+          console.log(db_res);
           res.status(200).json({
             provider: db_res
           });
@@ -93,14 +93,14 @@ exports.respond = function(req, res){
     });
   }else{
     res.send(404);
-  }  
+  }
   // const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
   //   if(err) {
   //     return console.log(err);
   //   } else {
   //     provider.decrement();
   //   }
-  // });  
+  // });
  }
 
 /**
@@ -111,17 +111,17 @@ exports.respond = function(req, res){
   if(verify(req.params.id, req.user.id)){
     console.log(req.body);
     Provider.findOneAndUpdate(req.id, { $set : { occupiedBeds : parseInt(req.body.setBase) } } )
-      .exec(function(err, db_res) { 
-      if (err) { 
-        throw err; 
-      } 
-      else { 
-        console.log(db_res); 
+      .exec(function(err, db_res) {
+      if (err) {
+        throw err;
+      }
+      else {
+        console.log(db_res);
         res.status(200).json({
           provider: db_res
         });
       }
-    }); 
+    });
     } else {
       res.send(404);
     }
@@ -239,7 +239,7 @@ exports.newProvider = (req, res, next) => {
  * Update profile information.
  */
 exports.updateProvider = (req, res, next) => {
-  if(verify(req.params.id, req.user.id)){ 
+  if(verify(req.params.id, req.user.id)){
     // req.assert('email', 'Please enter a valid email address.').isEmail();
     // req.sanitize('email').normalizeEmail({ remove_dots: false });
 
@@ -257,7 +257,7 @@ exports.updateProvider = (req, res, next) => {
         if (err) { return next(err); }
         // return res.json(provider);
         res.send(200);
-    }); 
+    });
 
     // Provider.findById(req.id, (err, provider) => {
     //   if (err) { return next(err); }
