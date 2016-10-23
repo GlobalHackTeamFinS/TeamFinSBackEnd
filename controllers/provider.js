@@ -58,10 +58,10 @@ exports.respond = function(req, res){
         res.status(200).json({
           provider: db_res
         });
-      } 
+      }
     });
     }else{
-      res.send(404);
+      res.send(401);
     }
   // const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
   //   if(err) {
@@ -90,15 +90,15 @@ exports.respond = function(req, res){
         }
     });
   }else{
-    res.send(404);
-  }  
+    res.send(401);
+  }
   // const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
   //   if(err) {
   //     return console.log(err);
   //   } else {
   //     provider.decrement();
   //   }
-  // });  
+  // });
  }
 
 /**
@@ -117,9 +117,9 @@ exports.respond = function(req, res){
           provider: db_res
         });
       }
-    }); 
+    });
     } else {
-      res.send(404);
+      res.send(401);
     }
   // const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
   //   if(err) {
@@ -234,7 +234,7 @@ exports.newProvider = (req, res, next) => {
  * Update profile information.
  */
 exports.updateProvider = (req, res, next) => {
-  if(verify(req.params.id, req.user.id)){ 
+  if(verify(req.params.id, req.user.id)){
     // req.assert('email', 'Please enter a valid email address.').isEmail();
     // req.sanitize('email').normalizeEmail({ remove_dots: false });
 
@@ -277,7 +277,7 @@ exports.updateProvider = (req, res, next) => {
     //   });
     // });
   } else {
-    res.send(404);
+    res.send(401);
   }
 };
 
