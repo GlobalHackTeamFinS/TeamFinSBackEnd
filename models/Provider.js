@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 const Float = require('mongoose-float').loadType(mongoose);
-
+const geocoder = require('geocoder');
 const providerSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   name: { type: String, default: null },
@@ -35,8 +35,6 @@ const providerSchema = new mongoose.Schema({
   intakeEnd: { type: Number, default: 0 },
   description: { type: String, default: null }
 }, { timestamps: true });
-
-
 
 
 // providerSchema.methods.increment = function(){
@@ -72,6 +70,16 @@ providerSchema.pre('save', function (next) {
   });
 });
 
+/*providerSchema.pre('save', function(next) {
+  var doc = this;
+  geocoder.geocode(this.address, function ( err, data ) {
+    if(data && data.status == 'OK'){
+      doc.gpsLocation.latitude = data.results[0].geometry.location.lat;
+      doc.gpsLocation.longitude = data.results[0].geometry.location.lng;
+    }
+    next();
+  });
+});*/
 /**
  * Helper method for validating provider's password.
  */
