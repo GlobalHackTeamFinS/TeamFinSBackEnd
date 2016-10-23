@@ -167,7 +167,7 @@ app.get('/add', authenticate, providerController.add);*/
  * Provider App Routes
  */
 
- app.post('/:coords', homeController.index);
+ app.get('/', homeController.index);
  // app.get('/dashboard', homeController.dashboard);
  app.post('/provider/new', providerController.newProvider);
  app.put('/provider/:id', authenticate, providerController.updateProvider);

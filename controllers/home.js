@@ -9,8 +9,7 @@ exports.index = (req, res) => {
   //   title: 'Home'
   // });
   // query = db.runCommand( { geoNear: "providers", near: [-90.2535793, 38.6109042], spherical: true, distanceMultiplier: 3963.2});
-  query = Provider.collection.geoNear(-90.2535793, 38.6109042, {spherical: true, maxDistance: 30, distanceMultiplier: 3963.2},function(err, docs) {
-    if(err) {
+  query = Provider.collection.geoNear(req.query.lon, req.query.lon, {spherical: true, maxDistance: 30, distanceMultiplier: 3963.2}, function(err, docs) {
 	 		res.send(err);
 	 	} else {
 	 		return res.json(docs.results);
