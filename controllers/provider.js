@@ -77,16 +77,19 @@ exports.respond = function(req, res){
  */
 
  exports.decrement = (req, res) => {
-  Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : -1 } } )
-    .exec(function(err, db_res) { 
-    if (err) { 
-      throw err; 
-    } 
-    else { 
-      console.log(db_res); 
-      res.send(200);
-    }
-  }); 
+  if(verify(req.params.id, req.user.id)){
+    Provider.findOneAndUpdate(req.id, { $inc : { occupiedBeds : -1 } } )
+      .exec(function(err, db_res) { 
+        if (err) { 
+          throw err; 
+        } else { 
+          console.log(db_res); 
+          res.send(200);
+        }
+    });
+  }else{
+    res.send(404);
+  }  
   // const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
   //   if(err) {
   //     return console.log(err);
@@ -101,17 +104,21 @@ exports.respond = function(req, res){
  */
 
  exports.setBase = (req, res) => {
-  console.log(req.body);
-  Provider.findOneAndUpdate(req.id, { $set : { occupiedBeds : parseInt(req.body.setBase) } } )
-    .exec(function(err, db_res) { 
-    if (err) { 
-      throw err; 
-    } 
-    else { 
-      console.log(db_res); 
-      res.send(200);
+  if(verify(req.params.id, req.user.id)){
+    console.log(req.body);
+    Provider.findOneAndUpdate(req.id, { $set : { occupiedBeds : parseInt(req.body.setBase) } } )
+      .exec(function(err, db_res) { 
+      if (err) { 
+        throw err; 
+      } 
+      else { 
+        console.log(db_res); 
+        res.send(200);
+      }
+    }); 
+    } else {
+      res.send(404);
     }
-  }); 
   // const provider = mongoose.model('Provider').findById(req.id, function(err, provider) {
   //   if(err) {
   //     return console.log(err);
@@ -161,6 +168,7 @@ exports.login = (req, res, next) => {
     });
   })(req, res, next);
 };
+
 
 /**
  * GET /logout
@@ -225,45 +233,49 @@ exports.newProvider = (req, res, next) => {
  * Update profile information.
  */
 exports.updateProvider = (req, res, next) => {
-  // req.assert('email', 'Please enter a valid email address.').isEmail();
-  // req.sanitize('email').normalizeEmail({ remove_dots: false });
+  if(verify(req.params.id, req.user.id)){ 
+    // req.assert('email', 'Please enter a valid email address.').isEmail();
+    // req.sanitize('email').normalizeEmail({ remove_dots: false });
 
-  const errors = req.validationErrors();
+    const errors = req.validationErrors();
 
-  if (errors) {
-    // req.flash('errors', errors);
-    // return res.redirect('/signup');
-    return res.json({error : errors })
+    if (errors) {
+      // req.flash('errors', errors);
+      // return res.redirect('/signup');
+      return res.json({error : errors })
+    }
+
+   console.log(req.body)
+   console.log(req);
+    Provider.where({_id: req.params.id }).update({ $set : req.body }, function(err, provider) {
+        if (err) { return next(err); }
+        // return res.json(provider);
+        res.send(200);
+    }); 
+
+    // Provider.findById(req.id, (err, provider) => {
+    //   if (err) { return next(err); }
+
+    //   provider.email = req.body.email || '';
+    //   provider.profile.name = req.body.name || '';
+    //   provider.profile.gender = req.body.gender || '';
+    //   provider.profile.location = req.body.location || '';
+    //   provider.profile.website = req.body.website || '';
+    //   provider.save((err) => {
+    //     if (err) {
+    //       if (err.code === 11000) {
+    //         req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
+    //         return res.redirect('/account');
+    //       }
+    //       return next(err);
+    //     }
+    //     req.flash('success', { msg: 'Profile information has been updated.' });
+    //     res.redirect('/account');
+    //   });
+    // });
+  } else {
+    res.send(404);
   }
-
- console.log(req.body)
- console.log(req);
-  Provider.where({_id: req.params.id }).update({ $set : req.body }, function(err, provider) {
-      if (err) { return next(err); }
-      // return res.json(provider);
-      res.send(200);
-  }); 
-
-  // Provider.findById(req.id, (err, provider) => {
-  //   if (err) { return next(err); }
-
-  //   provider.email = req.body.email || '';
-  //   provider.profile.name = req.body.name || '';
-  //   provider.profile.gender = req.body.gender || '';
-  //   provider.profile.location = req.body.location || '';
-  //   provider.profile.website = req.body.website || '';
-  //   provider.save((err) => {
-  //     if (err) {
-  //       if (err.code === 11000) {
-  //         req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
-  //         return res.redirect('/account');
-  //       }
-  //       return next(err);
-  //     }
-  //     req.flash('success', { msg: 'Profile information has been updated.' });
-  //     res.redirect('/account');
-  //   });
-  // });
 };
 
 /**
@@ -297,201 +309,187 @@ exports.postUpdatePassword = (req, res, next) => {
  * Delete provider account.
  */
 exports.deleteProvider = (req, res, next) => {
-  Provider.remove({ _id: req.provider.id }, (err) => {
-    if (err) { return next(err); }
-    req.logout();
-    req.flash('info', { msg: 'Your account has been deleted.' });
-    res.redirect('/');
-  });
+
+    Provider.remove({ _id: req.provider.id }, (err) => {
+      if (err) { return next(err); }
+      req.logout();
+      req.flash('info', { msg: 'Your account has been deleted.' });
+      res.redirect('/');
+    });
+
 };
 
-/**
- * GET /account/unlink/:provider
- * Unlink OAuth provider.
- */
-exports.getOauthUnlink = (req, res, next) => {
-  const provider = req.params.provider;
-  Provider.findById(req.provider.id, (err, provider) => {
-    if (err) { return next(err); }
-    provider[provider] = undefined;
-    provider.tokens = provider.tokens.filter(token => token.kind !== provider);
-    provider.save((err) => {
-      if (err) { return next(err); }
-      req.flash('info', { msg: `${provider} account has been unlinked.` });
-      res.redirect('/account');
-    });
-  });
-};
 
 /**
  * GET /reset/:token
  * Reset Password page.
  */
-exports.getReset = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return res.redirect('/');
-  }
-  Provider
-    .findOne({ passwordResetToken: req.params.token })
-    .where('passwordResetExpires').gt(Date.now())
-    .exec((err, provider) => {
-      if (err) { return next(err); }
-      if (!provider) {
-        req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
-        return res.redirect('/forgot');
-      }
-      res.render('account/reset', {
-        title: 'Password Reset'
-      });
-    });
-};
+// exports.getReset = (req, res, next) => {
+//   if (req.isAuthenticated()) {
+//     return res.redirect('/');
+//   }
+//   Provider
+//     .findOne({ passwordResetToken: req.params.token })
+//     .where('passwordResetExpires').gt(Date.now())
+//     .exec((err, provider) => {
+//       if (err) { return next(err); }
+//       if (!provider) {
+//         req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
+//         return res.redirect('/forgot');
+//       }
+//       res.render('account/reset', {
+//         title: 'Password Reset'
+//       });
+//     });
+// };
 
 /**
  * POST /reset/:token
  * Process the reset password request.
  */
-exports.postReset = (req, res, next) => {
-  req.assert('password', 'Password must be at least 4 characters long.').len(4);
-  req.assert('confirm', 'Passwords must match.').equals(req.body.password);
+// exports.postReset = (req, res, next) => {
+//   req.assert('password', 'Password must be at least 4 characters long.').len(4);
+//   req.assert('confirm', 'Passwords must match.').equals(req.body.password);
 
-  const errors = req.validationErrors();
+//   const errors = req.validationErrors();
 
-  if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('back');
-  }
+//   if (errors) {
+//     req.flash('errors', errors);
+//     return res.redirect('back');
+//   }
 
-  async.waterfall([
-    function (done) {
-      Provider
-        .findOne({ passwordResetToken: req.params.token })
-        .where('passwordResetExpires').gt(Date.now())
-        .exec((err, provider) => {
-          if (err) { return next(err); }
-          if (!provider) {
-            req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
-            return res.redirect('back');
-          }
-          provider.password = req.body.password;
-          provider.passwordResetToken = undefined;
-          provider.passwordResetExpires = undefined;
-          provider.save((err) => {
-            if (err) { return next(err); }
-            req.logIn(provider, (err) => {
-              done(err, provider);
-            });
-          });
-        });
-    },
-    function (provider, done) {
-      const transporter = nodemailer.createTransport({
-        service: 'SendGrid',
-        auth: {
-          provider: process.env.SENDGRID_USER,
-          pass: process.env.SENDGRID_PASSWORD
-        }
-      });
-      const mailOptions = {
-        to: provider.email,
-        from: 'hackathon@starter.com',
-        subject: 'Your Hackathon Starter password has been changed',
-        text: `Hello,\n\nThis is a confirmation that the password for your account ${provider.email} has just been changed.\n`
-      };
-      transporter.sendMail(mailOptions, (err) => {
-        req.flash('success', { msg: 'Success! Your password has been changed.' });
-        done(err);
-      });
-    }
-  ], (err) => {
-    if (err) { return next(err); }
-    res.redirect('/');
-  });
-};
+//   async.waterfall([
+//     function (done) {
+//       Provider
+//         .findOne({ passwordResetToken: req.params.token })
+//         .where('passwordResetExpires').gt(Date.now())
+//         .exec((err, provider) => {
+//           if (err) { return next(err); }
+//           if (!provider) {
+//             req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
+//             return res.redirect('back');
+//           }
+//           provider.password = req.body.password;
+//           provider.passwordResetToken = undefined;
+//           provider.passwordResetExpires = undefined;
+//           provider.save((err) => {
+//             if (err) { return next(err); }
+//             req.logIn(provider, (err) => {
+//               done(err, provider);
+//             });
+//           });
+//         });
+//     },
+//     function (provider, done) {
+//       const transporter = nodemailer.createTransport({
+//         service: 'SendGrid',
+//         auth: {
+//           provider: process.env.SENDGRID_USER,
+//           pass: process.env.SENDGRID_PASSWORD
+//         }
+//       });
+//       const mailOptions = {
+//         to: provider.email,
+//         from: 'hackathon@starter.com',
+//         subject: 'Your Hackathon Starter password has been changed',
+//         text: `Hello,\n\nThis is a confirmation that the password for your account ${provider.email} has just been changed.\n`
+//       };
+//       transporter.sendMail(mailOptions, (err) => {
+//         req.flash('success', { msg: 'Success! Your password has been changed.' });
+//         done(err);
+//       });
+//     }
+//   ], (err) => {
+//     if (err) { return next(err); }
+//     res.redirect('/');
+//   });
+// };
 
 /**
  * GET /forgot
  * Forgot Password page.
  */
-exports.getForgot = (req, res) => {
-  if (req.isAuthenticated()) {
-    return res.redirect('/');
-  }
-  res.render('account/forgot', {
-    title: 'Forgot Password'
-  });
-};
+// exports.getForgot = (req, res) => {
+//   if (req.isAuthenticated()) {
+//     return res.redirect('/');
+//   }
+//   res.render('account/forgot', {
+//     title: 'Forgot Password'
+//   });
+// };
 
 /**
  * POST /forgot
  * Create a random token, then the send provider an email with a reset link.
  */
-exports.postForgot = (req, res, next) => {
-  req.assert('email', 'Please enter a valid email address.').isEmail();
-  req.sanitize('email').normalizeEmail({ remove_dots: false });
+// exports.postForgot = (req, res, next) => {
+//   req.assert('email', 'Please enter a valid email address.').isEmail();
+//   req.sanitize('email').normalizeEmail({ remove_dots: false });
 
-  const errors = req.validationErrors();
+//   const errors = req.validationErrors();
 
-  if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/forgot');
-  }
+//   if (errors) {
+//     req.flash('errors', errors);
+//     return res.redirect('/forgot');
+//   }
 
-  async.waterfall([
-    function (done) {
-      crypto.randomBytes(16, (err, buf) => {
-        const token = buf.toString('hex');
-        done(err, token);
-      });
-    },
-    function (token, done) {
-      Provider.findOne({ email: req.body.email }, (err, provider) => {
-        if (err) { return done(err); }
-        if (!provider) {
-          req.flash('errors', { msg: 'Account with that email address does not exist.' });
-          return res.redirect('/forgot');
-        }
-        provider.passwordResetToken = token;
-        provider.passwordResetExpires = Date.now() + 3600000; // 1 hour
-        provider.save((err) => {
-          done(err, token, provider);
-        });
-      });
-    },
-    function (token, provider, done) {
-      const transporter = nodemailer.createTransport({
-        service: 'SendGrid',
-        auth: {
-          provider: process.env.SENDGRID_USER,
-          pass: process.env.SENDGRID_PASSWORD
-        }
-      });
-      const mailOptions = {
-        to: provider.email,
-        from: 'hackathon@starter.com',
-        subject: 'Reset your password on Hackathon Starter',
-        text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
-          Please click on the following link, or paste this into your browser to complete the process:\n\n
-          http://${req.headers.host}/reset/${token}\n\n
-          If you did not request this, please ignore this email and your password will remain unchanged.\n`
-      };
-      transporter.sendMail(mailOptions, (err) => {
-        req.flash('info', { msg: `An e-mail has been sent to ${provider.email} with further instructions.` });
-        done(err);
-      });
-    }
-  ], (err) => {
-    if (err) { return next(err); }
-    res.redirect('/forgot');
-  });
-};
+//   async.waterfall([
+//     function (done) {
+//       crypto.randomBytes(16, (err, buf) => {
+//         const token = buf.toString('hex');
+//         done(err, token);
+//       });
+//     },
+//     function (token, done) {
+//       Provider.findOne({ email: req.body.email }, (err, provider) => {
+//         if (err) { return done(err); }
+//         if (!provider) {
+//           req.flash('errors', { msg: 'Account with that email address does not exist.' });
+//           return res.redirect('/forgot');
+//         }
+//         provider.passwordResetToken = token;
+//         provider.passwordResetExpires = Date.now() + 3600000; // 1 hour
+//         provider.save((err) => {
+//           done(err, token, provider);
+//         });
+//       });
+//     },
+//     function (token, provider, done) {
+//       const transporter = nodemailer.createTransport({
+//         service: 'SendGrid',
+//         auth: {
+//           provider: process.env.SENDGRID_USER,
+//           pass: process.env.SENDGRID_PASSWORD
+//         }
+//       });
+//       const mailOptions = {
+//         to: provider.email,
+//         from: 'hackathon@starter.com',
+//         subject: 'Reset your password on Hackathon Starter',
+//         text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
+//           Please click on the following link, or paste this into your browser to complete the process:\n\n
+//           http://${req.headers.host}/reset/${token}\n\n
+//           If you did not request this, please ignore this email and your password will remain unchanged.\n`
+//       };
+//       transporter.sendMail(mailOptions, (err) => {
+//         req.flash('info', { msg: `An e-mail has been sent to ${provider.email} with further instructions.` });
+//         done(err);
+//       });
+//     }
+//   ], (err) => {
+//     if (err) { return next(err); }
+//     res.redirect('/forgot');
+//   });
+// };
 
-const verify = function(requestedId, decodedId){
-  if (requestedId == decodedId){
-    return true;
-  } else {
-    return false;
-  }
-};
+// const verify = function(requestedId, decodedId){
+//   if (requestedId == decodedId){
+//     return true;
+//   } else {
+//     return false;
+//   }
+// };
+
 /**
 //  * GET /login
 //  * Login page.
@@ -527,5 +525,23 @@ const verify = function(requestedId, decodedId){
 // exports.getAccount = (req, res) => {
 //   res.render('account/profile', {
 //     title: 'Account Management'
+//   });
+// };
+
+/**
+//  * GET /account/unlink/:provider
+//  * Unlink OAuth provider.
+//  */
+// exports.getOauthUnlink = (req, res, next) => {
+//   const provider = req.params.provider;
+//   Provider.findById(req.provider.id, (err, provider) => {
+//     if (err) { return next(err); }
+//     provider[provider] = undefined;
+//     provider.tokens = provider.tokens.filter(token => token.kind !== provider);
+//     provider.save((err) => {
+//       if (err) { return next(err); }
+//       req.flash('info', { msg: `${provider} account has been unlinked.` });
+//       res.redirect('/account');
+//     });
 //   });
 // };
